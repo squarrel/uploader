@@ -6,7 +6,7 @@ class CreatingDocument(TestCase):
     """Test creating a Document."""
     def setUp(self):
         Document.objects.create(
-                name='John Doe CV'
+                name='John Doe CV',
                 description='Work biography of John Doe')
 
     def test_document_created(self):
