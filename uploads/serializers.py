@@ -1,4 +1,5 @@
 """Serializers for the uploads application models."""
+from rest_framework import serializers
 from uploads.models import Document
 
 class DocumentSerializer(serializers.ModelSerializer):
@@ -13,4 +14,4 @@ class DocumentSerializer(serializers.ModelSerializer):
                 'filename')
 
     def create(self, validated_data):
-        pass
+        return Document.objects.create(**validated_data)
