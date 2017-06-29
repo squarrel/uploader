@@ -24,18 +24,20 @@ class DocumentViewActions(TestCase):
         self.user = User.objects.create_user(
             'john', password='password', email='john@example.com')
 
-    def tearDown(self):
-        os.remove(self.filepath)
-
-    def post_dict(self):
         filepath = self.filepath = os.getcwd() + '/temp_file'
         fw = open(filepath, 'w')
         fw.write('John Doe Biography\n')
         fw.close()
-        fo = open(filepath, 'rb')
+        self.fo = open(filepath, 'rb')
+
+    def tearDown(self):
+        os.remove(self.filepath)
+
+    def post_dict(self):
+        """Create a dictionary to be sent in a post request."""
         post_dict = {
             'name': 'John Doe CV',
-            'filename': fo}
+            'filename': self.fo}
         return post_dict
         
     def test_post_method(self):
@@ -45,3 +47,6 @@ class DocumentViewActions(TestCase):
         print(response.data)
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        documents = Document.objects.all()
+        self.assertEqual(documents.count(), 1)
+        self.assertEqual(documents[0].name, 'John Doe CV')

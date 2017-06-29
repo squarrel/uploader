@@ -27,19 +27,23 @@ class DocumentView(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        print('-->', request.FILES)
+        print('\nrequest.data-->', request.data)
         filename = request.data['filename']
         print(filename)
+
         # security check of the uploaded file
         filetype = magic.from_buffer(filename.read())
-        if filetype not in ['application/pdf']:
-            raise ValidationError('Unapproved file type')
+        print('\nfiletype-->', filetype)
+        allowed_filetypes = [
+            'application/pdf', 'ASCII text', 'text/plain']
+        if filetype not in allowed_filetypes:
+            return Response(status=302)
 
-        with open(filename, 'wb+') as temp_file:
-            for chunk in filename.chunks():
-                temp_file.write(chunk)
+        #with open(filename, 'wb+') as temp_file:
+        #    for chunk in filename.chunks():
+        #        temp_file.write(chunk)
 
-        return Response(status=201)
+        return Response(status=status.HTTP_201_CREATED)
 
     def delete(self, request, pk, format=None):
         document = self.get_object(pk)
