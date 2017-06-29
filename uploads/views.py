@@ -27,13 +27,10 @@ class DocumentView(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        #print('\nrequest.data-->', request.data)
         filename = request.data['filename']
-        #print(filename)
 
         # security check of the uploaded file
         filetype = magic.from_buffer(filename.read())
-        #print('\nfiletype-->', filetype)
         allowed_filetypes = [
             'application/pdf', 'ASCII text', 'text/plain']
         if filetype not in allowed_filetypes:
