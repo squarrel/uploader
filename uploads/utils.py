@@ -11,5 +11,5 @@ def set_path(instance, filename):
     filename -- name of the file
     """
     today = timezone.now().date()
-    today_str = str(today).replace('-', '/') + '/'
+    today_str = 'media/' + str(today).replace('-', '/') + '/'
     return today_str + filename
