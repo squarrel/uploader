@@ -2,16 +2,18 @@
 
 from django.shortcuts import render
 from rest_framework import status
-from rest_framework.parsers import FileUploadParser
+from rest_framework.parsers import FileUploadParser, \
+    FormParser, MultiPartParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from uploads.models import Document
 from uploads.serializers import DocumentSerializer
+import magic
 
 
 class DocumentView(APIView):
     """Basic actions for the Document model."""
-    parser_classes = (FileUploadParser,)
+    parser_classes = (FormParser, MultiPartParser,)#(FileUploadParser,)
 
     def get_object(self, pk):
         try:
@@ -25,9 +27,17 @@ class DocumentView(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        uploading_file = request.data['file']
+        print('-->', request.FILES)
+        filename = request.data['filename']
+        print(filename)
         # security check of the uploaded file
-        # to do here
+        filetype = magic.from_buffer(filename.read())
+        if filetype not in ['application/pdf']:
+            raise ValidationError('Unapproved file type')
+
+        with open(filename, 'wb+') as temp_file:
+            for chunk in filename.chunks():
+                temp_file.write(chunk)
 
         return Response(status=201)
 

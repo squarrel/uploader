@@ -39,7 +39,9 @@ class DocumentViewActions(TestCase):
         return post_dict
         
     def test_post_method(self):
-        #doc = SimpleUploadedFile('CV.pdf', self.create_file, content_type='application/pdf')
-        response = self.client.post(reverse('documents'), self.post_dict(), format='multipart')
-        print('###')
+        response = self.client.post(
+            reverse('documents'),
+            self.post_dict(),)
+        print(response.data)
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
