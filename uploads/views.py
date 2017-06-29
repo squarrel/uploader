@@ -24,7 +24,7 @@ class DocumentView(APIView):
         serializer = DocumentSerializer(documents, many=True)
         return Response(serializer.data)
 
-    def post(self, request, filename, format=None):
+    def post(self, request, format=None):
         uploading_file = request.data['file']
         # security check of the uploaded file
         # to do here

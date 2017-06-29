@@ -3,5 +3,5 @@ from uploads import views
 
 
 urlpatterns = [
-    url(r'uploads', views.DocumentView.as_view()),
+    url(r'documents', views.DocumentView.as_view(), name='documents'),
 ]
