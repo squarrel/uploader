@@ -13,5 +13,5 @@ class DocumentSerializer(serializers.ModelSerializer):
                 'description',
                 'filename')
 
-    def create(self, validated_data):
-        return Document.objects.create(**validated_data)
+    #def create(self, validated_data):
+    #    return Document.objects.create(**validated_data)

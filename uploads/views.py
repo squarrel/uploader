@@ -1,13 +1,15 @@
 """Defined views for the uploads app."""
 
 from django.shortcuts import render
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.parsers import FileUploadParser
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from uploads.models import Document
+from uploads.serializers import DocumentSerializer
 
 
-class DocumentView(views.APIView):
+class DocumentView(APIView):
     """Basic actions for the Document model."""
     parser_classes = (FileUploadParser,)
 
@@ -19,7 +21,7 @@ class DocumentView(views.APIView):
 
     def get(self, request, format=None):
         documents = Document.objects.all()
-        serializer = DocumentSerializer(documents, many=true)
+        serializer = DocumentSerializer(documents, many=True)
         return Response(serializer.data)
 
     def post(self, request, filename, format=None):
