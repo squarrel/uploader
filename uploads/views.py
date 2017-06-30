@@ -8,12 +8,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from uploads.models import Document
 from uploads.serializers import DocumentSerializer
-import magic
 
 
 class DocumentView(APIView):
     """Basic actions for the Document model."""
-    parser_classes = (FormParser, MultiPartParser,)#(FileUploadParser,)
+    parser_classes = (FormParser, MultiPartParser,)
 
     def get_object(self, pk):
         try:
@@ -27,17 +26,9 @@ class DocumentView(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        filename = request.data['filename']
-
-        # security check of the uploaded file
-        filetype = magic.from_buffer(filename.read())
-        allowed_filetypes = [
-            'application/pdf', 'ASCII text', 'text/plain']
-        if filetype not in allowed_filetypes:
-            return Response(status=400)
-
         serializer = DocumentSerializer(
-            data=request.data)
+            data=request.data,
+            partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(status=status.HTTP_201_CREATED)
