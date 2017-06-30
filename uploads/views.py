@@ -11,7 +11,7 @@ from uploads.serializers import DocumentSerializer
 
 class DocumentView(APIView):
     """Basic actions for the Document model."""
-    parser_classes = (FormParser, MultiPartParser,)
+    parser_classes = (MultiPartParser, FormParser,)
 
     def get_object(self, pk):
         try:
@@ -28,8 +28,14 @@ class DocumentView(APIView):
         serializer = DocumentSerializer(
             data=request.data,
             partial=True)
+
         if serializer.is_valid():
-            serializer.save(uploader=request.user)
+            if 'filename' in request.data:
+                serializer.save(
+                    uploader=request.user,
+                    filename=request.data['filename'])
+            else:
+                serializer.save(uploader=request.user)
             return Response(status=status.HTTP_201_CREATED)
         else:
             return Response(status=400)

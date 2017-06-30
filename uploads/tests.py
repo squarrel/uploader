@@ -52,6 +52,7 @@ class DocumentViewActions(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         documents = Document.objects.all()
         self.assertEqual(documents.count(), 1)
-        document = documents[0]
+        document = self.document = documents[0]
         self.assertEqual(document.name, 'John Doe CV')
         self.assertEqual(document.uploader, self.user)
+        self.assertTrue(document.filename)
