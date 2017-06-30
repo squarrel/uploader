@@ -29,7 +29,7 @@ class DocumentView(APIView):
             data=request.data,
             partial=True)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(uploader=request.user)
             return Response(status=status.HTTP_201_CREATED)
         else:
             return Response(status=400)

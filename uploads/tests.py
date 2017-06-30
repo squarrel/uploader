@@ -19,10 +19,12 @@ class CreatingDocument(TestCase):
 
 
 class DocumentViewActions(TestCase):
-    """Test all views for the uploads app."""
+    """Test DocumentView."""
     def setUp(self):
+        """Create a user and log her in. Create a file and open it."""
         self.user = User.objects.create_user(
             'john', password='password', email='john@example.com')
+        self.client.login(username='john', password='password')
 
         filepath = self.filepath = os.getcwd() + '/temp_file'
         fw = open(filepath, 'w')
@@ -31,6 +33,7 @@ class DocumentViewActions(TestCase):
         self.fo = open(filepath, 'rb')
 
     def tearDown(self):
+        """Remove the created file and uploaded file."""
         os.remove(self.filepath)
 
     def post_dict(self):
@@ -40,7 +43,8 @@ class DocumentViewActions(TestCase):
             'filename': self.fo}
         return post_dict
         
-    def test_post_method(self):
+    def test_post_method_valid(self):
+        """Test view post method by sending it a valid file."""
         response = self.client.post(
             reverse('documents'),
             self.post_dict(),)
@@ -48,4 +52,6 @@ class DocumentViewActions(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         documents = Document.objects.all()
         self.assertEqual(documents.count(), 1)
-        self.assertEqual(documents[0].name, 'John Doe CV')
+        document = documents[0]
+        self.assertEqual(document.name, 'John Doe CV')
+        self.assertEqual(document.uploader, self.user)
