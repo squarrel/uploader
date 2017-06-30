@@ -3,6 +3,6 @@ from uploads.models import Document
 
 
 class DocumentAdmin(admin.ModelAdmin):
-    pass
+    readonly_fields = ('uploader',)
 
 admin.site.register(Document, DocumentAdmin)
