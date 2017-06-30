@@ -3,6 +3,7 @@ from rest_framework import serializers
 from uploads.models import Document
 import magic
 
+
 class DocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Document
@@ -15,7 +16,7 @@ class DocumentSerializer(serializers.ModelSerializer):
                 'filename')
 
     def validate_filename(self, filename):
-        # validate type of file
+        """Validate type of file."""
         filetype = magic.from_buffer(filename.read())
         allowed_filetypes = [
             'application/pdf', 'ASCII text', 'text/plain']

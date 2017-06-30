@@ -1,5 +1,4 @@
 """Defined views for the uploads app."""
-
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.parsers import FileUploadParser, \

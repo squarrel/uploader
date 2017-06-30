@@ -4,7 +4,7 @@ from uploads.utils import set_path
 
 
 class Document(models.Model):
-    """File to be uploaded by user and basic description fields."""
+    """File path of the uploaded file and its related descriptive fields."""
     name = models.CharField(max_length=40)
     date = models.DateTimeField(auto_now_add=True, blank=True)
     uploader = models.ForeignKey(User, null=True)
