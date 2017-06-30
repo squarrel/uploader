@@ -66,3 +66,6 @@ class DocumentViewActions(TestCase):
             reverse('documents'),
             {'filename': 'not a file'},)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data,
+            {'filename': ['The submitted data was not a file. Check the encoding type on the form.']})
