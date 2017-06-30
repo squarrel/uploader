@@ -1,3 +1,8 @@
 from django.contrib import admin
+from uploads.models import Document
 
-# Register your models here.
+
+class DocumentAdmin(admin.ModelAdmin):
+    pass
+
+admin.site.register(Document, DocumentAdmin)
