@@ -40,6 +40,7 @@ class DocumentViewActions(TestCase):
             os.remove(self.document.filename.path)
         except:
             pass
+        self.fo.close()
 
     def post_dict(self):
         """Create a dictionary to be sent in a post request."""
