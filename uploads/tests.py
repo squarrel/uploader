@@ -35,6 +35,7 @@ class DocumentViewActions(TestCase):
     def tearDown(self):
         """Remove the created file and uploaded file."""
         os.remove(self.filepath)
+        os.remove(self.document.filename.path)
 
     def post_dict(self):
         """Create a dictionary to be sent in a post request."""
