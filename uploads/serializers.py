@@ -24,3 +24,6 @@ class DocumentSerializer(serializers.ModelSerializer):
             'application/pdf', 'ASCII text', 'text/plain']
         if filetype not in allowed_filetypes:
             raise serializers.ValidationError('The file is of unapproved type.')
+
+    def create(self, validated_data):
+        return Document.objects.create(**validated_data)

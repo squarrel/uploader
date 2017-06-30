@@ -64,5 +64,5 @@ class DocumentViewActions(TestCase):
     def test_post_method_error(self):
         response = self.client.post(
             reverse('documents'),
-            {},)
+            {'filename': 'not a file'},)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
