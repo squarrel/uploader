@@ -36,9 +36,9 @@ class DocumentView(APIView):
                     filename=request.data['filename'])
             else:
                 serializer.save(uploader=request.user)
-            return Response(status=status.HTTP_201_CREATED)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            return Response(status=400)
+            return Response(serializer.errors, status=status.HTTP_400_ERROR)
 
     def delete(self, request, pk, format=None):
         document = self.get_object(pk)

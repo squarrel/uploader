@@ -35,7 +35,10 @@ class DocumentViewActions(TestCase):
     def tearDown(self):
         """Remove the created file and uploaded file."""
         os.remove(self.filepath)
-        os.remove(self.document.filename.path)
+        try:
+            os.remove(self.document.filename.path)
+        except:
+            pass
 
     def post_dict(self):
         """Create a dictionary to be sent in a post request."""
@@ -57,3 +60,9 @@ class DocumentViewActions(TestCase):
         self.assertEqual(document.name, 'John Doe CV')
         self.assertEqual(document.uploader, self.user)
         self.assertTrue(document.filename)
+
+    def test_post_method_error(self):
+        response = self.client.post(
+            reverse('documents'),
+            {},)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
