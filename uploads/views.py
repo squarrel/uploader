@@ -24,8 +24,7 @@ class DocumentList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class DocumentView(APIView):
-    """Basic actions for the Document model."""
+class DocumentDetail(APIView):
     parser_classes = (MultiPartParser, FormParser,)
 
     def get_object(self, pk):
@@ -36,13 +35,12 @@ class DocumentView(APIView):
 
     def get(self, request, format=None):
         documents = Document.objects.all()
-        serializer = DocumentSerializer(documents, many=True)
+        serializer = DocumentSerializer(documents)
         return Response(serializer.data)
 
-    def post(self, request, format=None):
-        serializer = DocumentSerializer(
-            data=request.data,
-            partial=True)
+    def put(self, request, format=None):
+        document = self.get_object(pk)
+        serializer = DocumentSerializer(data=request.data, partial=True)
 
         if serializer.is_valid():
             if 'filename' in request.data:
@@ -52,8 +50,7 @@ class DocumentView(APIView):
             else:
                 serializer.save(uploader=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None):
         document = self.get_object(pk)
