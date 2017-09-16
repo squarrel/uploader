@@ -1,5 +1,6 @@
-"""Defined views for the uploads app."""
-from django.shortcuts import render
+"""Views for the uploads app."""
+from django.http import Http404
+
 from rest_framework import status
 from rest_framework.parsers import FileUploadParser, \
     FormParser, MultiPartParser
@@ -7,6 +8,20 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from uploads.models import Document
 from uploads.serializers import DocumentSerializer
+
+
+class DocumentList(APIView):
+    def get(self, request, format=None):
+        documents = Document.objects.all()
+        serializer = DocumentSerializer(documents, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = DocumentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class DocumentView(APIView):
