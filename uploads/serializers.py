@@ -5,8 +5,6 @@ import magic
 
 
 class DocumentSerializer(serializers.ModelSerializer):
-    uploader = serializers.CharField(source='uploader.username')
-
     class Meta:
         model = Document
         fields = (

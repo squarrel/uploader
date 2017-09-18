@@ -11,6 +11,8 @@ from uploads.serializers import DocumentSerializer
 
 
 class DocumentList(APIView):
+    #parser_classes = (MultiPartParser, FormParser,)
+
     def get(self, request, format=None):
         documents = Document.objects.all()
         serializer = DocumentSerializer(documents, many=True)
