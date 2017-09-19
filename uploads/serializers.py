@@ -8,12 +8,13 @@ class DocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Document
         fields = (
-                'id',
-                'name',
-                'date',
-                'uploader',
-                'description',
-                'filename')
+            'id',
+            'name',
+            'date',
+            'uploader',
+            'description',
+            'filename'
+        )
 
     def validate_filename(self, filename):
         """Validate type of file."""

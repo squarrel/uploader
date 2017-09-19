@@ -22,6 +22,17 @@ def user(db):
     return user
 
 
+@pytest.fixture
+def document(db, user):
+    """A Document fixture."""
+    document = Document.objects.create(
+        name='John CV',
+        uploader=user,
+        description='Mr Lennons biography'
+    )
+    return document
+
+
 def test_document_list_get(db):
     factory = APIRequestFactory()
     url = reverse_lazy('documents')
@@ -41,3 +52,12 @@ def test_document_list_post(db, user):
     request.user = user
     response = DocumentList.as_view()(request)
     assert response.status_code == 201
+
+
+def test_document_detail_get(db, document):
+    factory = APIRequestFactory()
+    pk = document.id
+    url = reverse_lazy('document', args=(pk,))
+    request = factory.get(url)
+    response = DocumentDetail.as_view()(request, pk)
+    assert response.status_code == 200

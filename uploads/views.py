@@ -11,7 +11,7 @@ from uploads.serializers import DocumentSerializer
 
 
 class DocumentList(APIView):
-    #parser_classes = (MultiPartParser, FormParser,)
+    parser_classes = (MultiPartParser, FormParser,)
 
     def get(self, request, format=None):
         documents = Document.objects.all()
@@ -35,9 +35,9 @@ class DocumentDetail(APIView):
         except Document.DoesNotExist:
             raise Http404
 
-    def get(self, request, format=None):
-        documents = Document.objects.all()
-        serializer = DocumentSerializer(documents)
+    def get(self, request, pk, format=None):
+        document = self.get_object(pk)
+        serializer = DocumentSerializer(document)
         return Response(serializer.data)
 
     def put(self, request, format=None):
