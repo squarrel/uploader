@@ -21,7 +21,12 @@ class DocumentList(APIView):
     def post(self, request, format=None):
         serializer = DocumentSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            if 'filename' in request.data:
+                serializer.save(
+                    uploader=request.user,
+                    filename=request.data['filename'])
+            else:
+                serializer.save(uploader=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

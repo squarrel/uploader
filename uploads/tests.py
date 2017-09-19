@@ -57,8 +57,10 @@ class DocumentViewActions(TestCase):
         """Test view post method by sending it a valid file."""
         response = self.client.post(
             reverse('documents'),
-            self.post_dict(),)
+            self.post_dict()
+        )
 
+        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         documents = Document.objects.all()
         self.assertEqual(documents.count(), 1)
