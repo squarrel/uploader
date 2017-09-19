@@ -60,7 +60,6 @@ class DocumentViewActions(TestCase):
             self.post_dict()
         )
 
-        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         documents = Document.objects.all()
         self.assertEqual(documents.count(), 1)
@@ -72,8 +71,12 @@ class DocumentViewActions(TestCase):
     def test_post_method_error(self):
         response = self.client.post(
             reverse('documents'),
-            {'filename': 'not a file'}
+            {
+            'name': 'File name',
+            'filename': 'not a file'
+            }
         )
+
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
