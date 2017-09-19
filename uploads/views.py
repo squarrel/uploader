@@ -40,7 +40,7 @@ class DocumentDetail(APIView):
         serializer = DocumentSerializer(document)
         return Response(serializer.data)
 
-    def put(self, request, format=None):
+    def put(self, request, pk, format=None):
         document = self.get_object(pk)
         serializer = DocumentSerializer(data=request.data, partial=True)
 

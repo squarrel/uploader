@@ -80,3 +80,34 @@ def test_document_detail_get__fail(db):
     request = factory.get(url)
     response = DocumentDetail.as_view()(request, pk)
     assert response.status_code == 404
+
+
+def test_document_detail_put(db, user, document):
+    factory = APIRequestFactory()
+    pk = document.id
+    form_data = {'name': 'Another Name'}
+    url = reverse_lazy('document', args=(pk,))
+    request = factory.put(url, form_data)
+    request.user = user
+    response = DocumentDetail.as_view()(request, pk)
+    assert response.status_code == 201
+
+
+def test_document_detail_put__non_existing_document_fail(db, user):
+    factory = APIRequestFactory()
+    pk = 99
+    form_data = {'name': 'Another Name'}
+    url = reverse_lazy('document', args=(pk,))
+    request = factory.put(url, form_data)
+    request.user = user
+    response = DocumentDetail.as_view()(request, pk)
+    assert response.status_code == 404
+
+
+def test_document_detail_delete(db, document):
+    factory = APIRequestFactory()
+    pk = document.id
+    url = reverse_lazy('document', args=(pk,))
+    request = factory.delete(url)
+    response = DocumentDetail.as_view()(request, pk)
+    assert response.status_code == 204
