@@ -54,6 +54,16 @@ def test_document_list_post(db, user):
     assert response.status_code == 201
 
 
+def test_document_list_post__empty_form_fail(db, user):
+    factory = APIRequestFactory()
+    form_data = {}
+    url = reverse_lazy('documents')
+    request = factory.post(url, form_data)
+    request.user = user
+    response = DocumentList.as_view()(request)
+    assert response.status_code == 400
+
+
 def test_document_detail_get(db, document):
     factory = APIRequestFactory()
     pk = document.id
@@ -61,3 +71,12 @@ def test_document_detail_get(db, document):
     request = factory.get(url)
     response = DocumentDetail.as_view()(request, pk)
     assert response.status_code == 200
+
+
+def test_document_detail_get__fail(db):
+    factory = APIRequestFactory()
+    pk = 99
+    url = reverse_lazy('document', args=(pk,))
+    request = factory.get(url)
+    response = DocumentDetail.as_view()(request, pk)
+    assert response.status_code == 404
