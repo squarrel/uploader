@@ -1,18 +1,21 @@
+import json
+import os
+
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 from uploads.models import Document
-import json
-import os
+
 
 class CreatingDocument(TestCase):
     """Test creating a Document."""
     def setUp(self):
         Document.objects.create(
-                name='John Doe CV',
-                description='Work biography of John Doe')
+            name='John Doe CV',
+            description='Work biography of John Doe'
+        )
 
     def test_document_created(self):
         document = Document.objects.get(pk=1)
@@ -46,7 +49,8 @@ class DocumentViewActions(TestCase):
         """Create a dictionary to be sent in a post request."""
         post_dict = {
             'name': 'John Doe CV',
-            'filename': self.fo}
+            'filename': self.fo
+        }
         return post_dict
         
     def test_post_method_valid(self):
@@ -66,8 +70,10 @@ class DocumentViewActions(TestCase):
     def test_post_method_error(self):
         response = self.client.post(
             reverse('documents'),
-            {'filename': 'not a file'},)
+            {'filename': 'not a file'}
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data,
-            {'filename': ['The submitted data was not a file. Check the encoding type on the form.']})
+            {'filename': ['The submitted data was not a file. Check the encoding type on the form.']}
+        )
